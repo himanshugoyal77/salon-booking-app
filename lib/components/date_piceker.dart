@@ -1,5 +1,7 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_app/utils/styles.dart';
+import 'package:salon_app/utils/text.dart';
 
 class CustomDatePicker extends StatefulWidget {
   const CustomDatePicker({
@@ -17,27 +19,24 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20, left: 12, right: 12),
           child: Row(
             children: [
               const Icon(
                 Icons.arrow_back_ios,
-                color: Colors.white60,
-                size: 20,
+                color: Colors.black,
+                size: 16,
               ),
               const Spacer(),
               Text(
                 "${setMonth(newdate.month)}, ${newdate.year}",
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400),
+                style: AppTextStyles.bodyRegularSemibold,
               ),
               const Spacer(),
               const Icon(
                 Icons.arrow_forward_ios,
-                color: Colors.white60,
-                size: 20,
+                color: Colors.black,
+                size: 16,
               ),
             ],
           ),
@@ -52,8 +51,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             // dayTextStyle: TextStyle(color: Colors.white),
             deactivatedColor: Colors.white,
             initialSelectedDate: DateTime.now(),
-            selectionColor: Colors.white,
-            selectedTextColor: const Color(0xff721c80),
+            selectionColor: Styles.primaryColor,
+            selectedTextColor: Colors.white,
+            dateTextStyle: AppTextStyles.bodyRegularSemibold,
+
             onDateChange: (date) {
               setState(() {
                 print(date.day);

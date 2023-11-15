@@ -8,6 +8,12 @@ class Styles {
   static Color bgWhite = const Color(0xffFEFEFE);
   static Color primaryColor = const Color(0xff48201A);
   static Color secondaryColor = const Color(0xffFEF3EC);
+  static Color neutralColor = HexColor.fromHex("111315");
+
+  static Color gray100 = HexColor.fromHex("828282");
+  static Color gray200 = HexColor.fromHex("EEEFF1");
+
+  static Color primary = HexColor.fromHex("25283D");
 
   static TextStyle heading = TextStyle(
     fontSize: 20,
@@ -26,4 +32,15 @@ class Styles {
     fontWeight: FontWeight.normal,
     color: primaryColor,
   );
+}
+
+extension HexColor on Color {
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) {
+      buffer.write('ff');
+    }
+    buffer.write(hexString.replaceAll('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
 }
