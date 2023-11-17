@@ -2,9 +2,9 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salon_app/components/date_piceker.dart';
-import 'package:salon_app/utils/styles.dart';
-import 'package:salon_app/utils/text.dart';
+import 'package:salon_app/features/details/view/widgets/date_piceker.dart';
+import 'package:salon_app/utils/ui/styles.dart';
+import 'package:salon_app/utils/ui/text.dart';
 
 class AvailableModal extends StatelessWidget {
   const AvailableModal({super.key});

@@ -57,6 +57,8 @@ dependencies:
   share_plus: ^7.2.1
   path_provider:
   screenshot: ^2.1.0
+  dotted_border: ^2.1.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

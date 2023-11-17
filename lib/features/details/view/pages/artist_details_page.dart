@@ -3,25 +3,17 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:salon_app/components/maps/cusotm_map.dart';
-import 'package:salon_app/pages/available_dates.dart';
-import 'package:salon_app/utils/styles.dart';
+import 'package:salon_app/features/booking/book.dart';
+import 'package:salon_app/features/details/view/widgets/cusotm_map.dart';
+import 'package:salon_app/features/details/view/widgets/available_dates.dart';
+import 'package:salon_app/utils/data/pastwork.dart';
+import 'package:salon_app/utils/ui/styles.dart';
 import 'package:readmore/readmore.dart';
-import 'package:salon_app/utils/text.dart';
+import 'package:salon_app/utils/ui/text.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const pastWork = [
-  'https://img.freepik.com/free-photo/professional-woman-making-up-girl-s-eyes_23-2148210754.jpg?size=626&ext=jpg&ga=GA1.1.710913862.1693585979&semt=sph',
-  'https://img.freepik.com/free-photo/woman-hairdresser-salon_144627-8871.jpg?w=360&t=st=1700043072~exp=1700043672~hmac=86aca33769f8c7e168f9112fe9a284f8ff18597694ab7673c5228b5136bf2fd5',
-  'https://img.freepik.com/free-photo/woman-hairdresser-salon_144627-8819.jpg?size=626&ext=jpg&ga=GA1.1.710913862.1693585979&semt=sph',
-  'https://img.freepik.com/free-photo/beautician-with-brush-applies-white-moisturizing-mask-face-young-girl-client-spa-beauty-salon_343596-4246.jpg?size=626&ext=jpg&ga=GA1.1.710913862.1693585979&semt=sph',
-  'https://img.freepik.com/free-photo/woman-getting-treatment-hairdresser-shop_23-2149229779.jpg?size=626&ext=jpg&ga=GA1.1.710913862.1693585979&semt=sph'
-];
 
 class ArtistDetailsPage extends StatefulWidget {
   ArtistDetailsPage({super.key, required this.animation});
@@ -338,8 +330,8 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13),
                           ),
-                          Text('sdfsd'),
-                          Text('sdfsd'),
+                          const Text('sdfsd'),
+                          const Text('sdfsd'),
                         ]),
                       ),
                       const SizedBox(
@@ -384,7 +376,18 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Book(
+                                  name: 'Aisha',
+                                  id: 1,
+                                  services: ['Facial Artist', 'Hair Stylist'],
+                                ),
+                              ),
+                            );
+                          },
                           child: Text('Book Appointment',
                               style: AppTextStyles.heading6.copyWith(
                                 fontSize: 18,
@@ -395,14 +398,6 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                       ),
                     ]),
               ),
-
-              // Expanded(
-              //   // ignore: prefer_const_literals_to_create_immutables
-              //   child: TabBarView(children: [
-              //     // MyLivePage(),
-              //     // MyResultPage(),
-              //   ]),
-              // ),
             ],
           ),
         ),

@@ -1,8 +1,8 @@
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salon_app/utils/styles.dart';
-import 'package:salon_app/utils/text.dart';
+import 'package:salon_app/utils/ui/styles.dart';
+import 'package:salon_app/utils/ui/text.dart';
 
 enum TextFieldType {
   text,

@@ -1,8 +1,8 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
-import 'package:salon_app/utils/styles.dart';
-import 'package:salon_app/utils/text.dart';
+import 'package:salon_app/utils/ui/styles.dart';
+import 'package:salon_app/utils/ui/text.dart';
 
 class ToastManager {
   static void showErrorToast(BuildContext context, String message) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:salon_app/utils/styles.dart';
+import 'package:salon_app/utils/ui/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextStyles {

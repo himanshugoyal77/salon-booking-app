@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:salon_app/pages/auth.dart';
-import 'package:salon_app/pages/home_page.dart';
+import 'package:salon_app/features/search/controller/searchbar_controller.dart';
+import 'package:salon_app/features/auth/view/pages/auth.dart';
+import 'package:salon_app/features/home/view/home_page.dart';
 import 'package:salon_app/pages/onboarding.page.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,23 +19,25 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<LatLonController>(
-            create: ((context) => LatLonController())),
-      ],
-      child: ScreenUtilInit(
+    return ScreenUtilInit(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<LatLonController>(
+              create: ((context) => LatLonController())),
+          ChangeNotifierProvider<SearchbarController>(
+              create: ((context) => SearchbarController())),
+        ],
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Salon app',
-          theme: ThemeData(
-            fontFamily: "Inter",
-          ),
-          home:
-              //const AuthPage()
-              const Wrapper(),
-          //TestWidget()
-        ),
+            debugShowCheckedModeBanner: false,
+            title: 'Salon app',
+            theme: ThemeData(
+              fontFamily: "Inter",
+            ),
+            home: AuthPage()
+            //const AuthPage()
+            // const Wrapper(),
+            //TestWidget()
+            ),
       ),
     );
   }
