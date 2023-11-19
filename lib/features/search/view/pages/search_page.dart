@@ -7,6 +7,7 @@ import 'package:salon_app/features/search/controller/searchbar_controller.dart';
 
 import 'package:salon_app/features/home/view/home_page.dart';
 import 'package:salon_app/features/home/widgets/topartist.dart';
+import 'package:salon_app/features/search/view/widgets/searchbar.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 
 import '../../../../utils/ui/text.dart';
@@ -68,16 +69,16 @@ class _SearchPageState extends State<SearchPage> {
           color: Styles.primaryColor,
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MySearchBar(),
+                  MySearchBar(),
                   const SizedBox(height: 20),
                   Visibility(
                     visible: provider.isFilter,
@@ -99,6 +100,8 @@ class _SearchPageState extends State<SearchPage> {
                         spacing: 6,
                         children: options
                             .map((e) => Chip(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 side: BorderSide(
                                     color: Styles.primaryColor.withOpacity(0.7),
                                     width: 0.8),
@@ -143,39 +146,40 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-          ),
-          Container(
-            height: !provider.isFilter ? size.height * 0.78 : size.height * 0.5,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
-              ),
-            ),
-            child: Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
-                  ],
+            Container(
+              height:
+                  !provider.isFilter ? size.height * 0.78 : size.height * 0.5,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18),
+                  topRight: Radius.circular(18),
                 ),
               ),
-            ),
-          )
-        ],
+              child: Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                      TopArtistCard(size: size),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

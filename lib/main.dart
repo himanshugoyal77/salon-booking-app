@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salon_app/features/booking/booking_date.dart';
 import 'package:salon_app/features/search/controller/searchbar_controller.dart';
 import 'package:salon_app/features/auth/view/pages/auth.dart';
 import 'package:salon_app/features/home/view/home_page.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<LatLonController>(
               create: ((context) => LatLonController())),
+          ChangeNotifierProvider(create: ((context) => BookingDate())),
           ChangeNotifierProvider<SearchbarController>(
               create: ((context) => SearchbarController())),
         ],
