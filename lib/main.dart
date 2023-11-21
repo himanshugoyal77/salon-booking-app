@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon_app/features/booking/booking_date.dart';
+import 'package:salon_app/features/favourites/favourites.dart';
+import 'package:salon_app/features/profile/profilescreen.dart';
+import 'package:salon_app/features/schedule/userschedule.dart';
 import 'package:salon_app/features/search/controller/searchbar_controller.dart';
 import 'package:salon_app/features/auth/view/pages/auth.dart';
 import 'package:salon_app/features/home/view/home_page.dart';
@@ -64,9 +67,9 @@ class _WrapperState extends State<Wrapper> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     const HomePage(),
-    const OnboardingPage(),
-    const OnboardingPage(),
-    const OnboardingPage(),
+    const UserSchedule(),
+    const FavouriteArtists(),
+    const ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -108,7 +111,7 @@ class _WrapperState extends State<Wrapper> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              CupertinoIcons.chat_bubble,
+              Icons.favorite_border,
             ),
             label: '',
           ),

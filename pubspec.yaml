@@ -61,6 +61,8 @@ dependencies:
   intl: ^0.18.1
   flutter_stripe:
   flutter_dotenv: ^5.0.2
+  syncfusion_flutter_barcodes: ^23.2.4
+  scratcher: "^2.3.0"
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_app/utils/ui/styles.dart';
 
 class Carousel extends StatelessWidget {
   const Carousel({
@@ -64,43 +65,34 @@ class Carousel extends StatelessWidget {
               Align(
                 child: Image.network(
                   "https://images.squarespace-cdn.com/content/v1/5e867df9747b0e555c337eef/1589945925617-4NY8TG8F76FH1O0P46FW/Kampaamo-helsinki-hair-design-balayage-hiustenpidennys-varjays.png",
-                  width: 120,
-                  height: 400,
+                  width: 110,
+                  height: 350,
                   fit: BoxFit.cover,
                 ),
               ),
             ],
           ),
         ),
-
         Container(
           height: 40,
           width: 400,
           margin: const EdgeInsets.all(6.0),
           decoration: BoxDecoration(
-            color: const Color(0xff721c80),
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xff721c80),
-                Color.fromARGB(255, 196, 103, 169),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: Styles.primaryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Row(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Spacer(
+                children: [
+                  const Spacer(
                     flex: 2,
                   ),
                   Text(
                     "Book your\nAppointment",
                     style: TextStyle(
-                        color: Color(0xffffffff),
+                        color: Styles.primaryColor,
                         fontStyle: FontStyle.italic,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -113,7 +105,7 @@ class Carousel extends StatelessWidget {
                   Text(
                     "Now",
                     style: TextStyle(
-                      color: Color(0xffffffff),
+                      color: Styles.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
                       fontSize: 16,
@@ -128,7 +120,7 @@ class Carousel extends StatelessWidget {
               Align(
                 child: Image.network(
                   "https://img.grouponcdn.com/bynder/2sLSquS1xGWk4QjzYuL7h461CDsJ/2s-2048x1229/v1/sc600x600.jpg",
-                  width: 120,
+                  width: 110,
                   height: 400,
                   fit: BoxFit.cover,
                 ),
@@ -136,7 +128,15 @@ class Carousel extends StatelessWidget {
             ],
           ),
         ),
-
+        Container(
+          height: 50,
+          width: 400,
+          decoration: BoxDecoration(
+              color: Colors.amber,
+              image: DecorationImage(
+                  image: AssetImage('assets/artists/a1.jpg'),
+                  fit: BoxFit.cover)),
+        )
       ],
       options: CarouselOptions(
         //autoPlayInterval: Duration(minutes: 1),
@@ -145,11 +145,11 @@ class Carousel extends StatelessWidget {
         enableInfiniteScroll: false,
         height: 180.0,
         enlargeCenterPage: true,
-        autoPlay: true,
+        autoPlay: false,
         aspectRatio: 10 / 8,
         autoPlayCurve: Curves.easeInOut,
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        viewportFraction: 0.78,
+        viewportFraction: 0.9,
       ),
     );
   }

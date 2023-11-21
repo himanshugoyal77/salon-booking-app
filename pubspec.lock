@@ -584,6 +584,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  scratcher:
+    dependency: "direct main"
+    description:
+      name: scratcher
+      sha256: cfcf86475a4eca1711b6e901f6608e4736fa0a3233dab754e05205206a3971b5
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   screenshot:
     dependency: "direct main"
     description:
@@ -669,6 +677,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
+  syncfusion_flutter_barcodes:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_barcodes
+      sha256: "70d7ebbd568d49d3a458cc93afc6868f12754358189e5dcea68850798239467a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.2.4"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "8a1220f978491f56431c66dacf1bb97bf2abcd1458b542fe0dfbf1a630c67260"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.2.4"
   term_glyph:
     dependency: transitive
     description:
