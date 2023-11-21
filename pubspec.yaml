@@ -54,11 +54,13 @@ dependencies:
   elegant_notification: ^1.11.2
   flutter_screenutil: ^5.9.0
   url_launcher: ^6.1.10
-  share_plus: ^7.2.1
+  share_plus:
   path_provider:
   screenshot: ^2.1.0
   dotted_border: ^2.1.0
   intl: ^0.18.1
+  flutter_stripe:
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +89,7 @@ flutter:
     - assets/fonts/
     - assets/services/
     - assets/artists/
+    - assets/.env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

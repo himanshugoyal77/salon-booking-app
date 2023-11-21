@@ -3,22 +3,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon_app/features/booking/booking_date.dart';
+import 'package:salon_app/features/booking/booking_summary.dart';
 import 'package:salon_app/features/details/view/widgets/date_piceker.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
 
 List<Map<String, dynamic>> time = [
-  {"time": "09:00 AM", "isAvailable": false},
-  {"time": "10:00 AM", "isAvailable": false},
-  {"time": "11:00 AM", "isAvailable": true},
-  {"time": "12:00 PM", "isAvailable": false},
-  {"time": "01:00 PM", "isAvailable": false},
-  {"time": "04:00 PM", "isAvailable": false},
-  {"time": "05:00 PM", "isAvailable": false},
-  {"time": "06:00 PM", "isAvailable": false},
-  {"time": "07:00 PM", "isAvailable": false},
-  {"time": "08:00 PM", "isAvailable": true},
-  {"time": "09:00 PM", "isAvailable": false}
+  {"time": "09:00 AM", "isAvailable": true, "isSelected": false},
+  {"time": "10:00 AM", "isAvailable": true, "isSelected": false},
+  {
+    "time": "11:00 AM",
+    "isAvailable": true,
+    "isSelected": false,
+  },
+  {"time": "12:00 PM", "isAvailable": true, "isSelected": false},
+  {"time": "01:00 PM", "isAvailable": false, "isSelected": false},
+  {"time": "04:00 PM", "isAvailable": false, "isSelected": false},
+  {"time": "05:00 PM", "isAvailable": false, "isSelected": false},
+  {"time": "06:00 PM", "isAvailable": true, "isSelected": false},
+  {"time": "07:00 PM", "isAvailable": true, "isSelected": false},
+  {
+    "time": "08:00 PM",
+    "isAvailable": true,
+    "isSelected": false,
+  },
+  {"time": "09:00 PM", "isAvailable": false, "isSelected": false}
 ];
 
 class Book extends StatefulWidget {
@@ -66,6 +75,8 @@ class _BookState extends State<Book> {
     },
   ];
 
+  String selectedTime = "09:00 AM";
+
   @override
   Widget build(BuildContext context) {
     double findTotal() {
@@ -104,31 +115,6 @@ class _BookState extends State<Book> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage('assets/artists/a1.jpg'),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.name,
-                        style: AppTextStyles.bodyRegularBold
-                            .copyWith(fontSize: 16, color: Styles.primaryColor),
-                      ),
-                      Text(
-                        widget.services.join(", "),
-                        style: AppTextStyles.bodyExtraSmall
-                            .copyWith(fontSize: 12, color: Styles.textGray),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               Text(
                 "PICK A DATE",
                 style: AppTextStyles.bodyExtraSmall,
@@ -182,31 +168,39 @@ class _BookState extends State<Book> {
                     mainAxisSpacing: 10),
                 shrinkWrap: true,
                 children: time
+                    .where((element) => element["isAvailable"])
                     .map(
-                      (e) => Chip(
-                        backgroundColor: !e["isAvailable"]
-                            ? Colors.transparent
-                            : Styles.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                            color: !e["isAvailable"]
-                                ? Colors.grey[400]!
-                                : Styles.primaryColor,
+                      (e) => InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedTime = e["time"];
+                          });
+                        },
+                        child: Chip(
+                          backgroundColor: selectedTime != e["time"]
+                              ? Colors.transparent
+                              : Styles.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: selectedTime != e["time"]
+                                  ? Colors.grey[400]!
+                                  : Styles.primaryColor,
+                            ),
                           ),
-                        ),
-                        color: MaterialStateProperty.all(Styles.primaryColor),
-                        labelPadding: const EdgeInsets.all(0),
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        visualDensity: VisualDensity.compact,
-                        label: Center(
-                          child: Text(
-                            e['time'] as String,
-                            style: !e["isAvailable"]
-                                ? AppTextStyles.bodyExtraSmall
-                                    .copyWith(color: Colors.grey[600])
-                                : AppTextStyles.bodyExtraSmallSemibold
-                                    .copyWith(color: Colors.white),
+                          color: MaterialStateProperty.all(Styles.primaryColor),
+                          labelPadding: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          visualDensity: VisualDensity.compact,
+                          label: Center(
+                            child: Text(
+                              e['time'] as String,
+                              style: selectedTime != e["time"]
+                                  ? AppTextStyles.bodyExtraSmall
+                                      .copyWith(color: Colors.grey[600])
+                                  : AppTextStyles.bodyExtraSmallSemibold
+                                      .copyWith(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
@@ -276,17 +270,18 @@ class _BookState extends State<Book> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/booking/confirm',
-                        arguments: {
-                          "name": widget.name,
-                          "services": widget.services,
-                          "id": widget.id,
-                          "date": context.read<BookingDate>().formatedDate,
-                          "time": time
-                              .where((element) => element["isAvailable"])
-                              .toList(),
-                          "selectedServices": selectedServices
-                        });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookingSummary(
+                                  name: widget.name,
+                                  id: widget.id,
+                                  services: widget.services,
+                                  selectedServices: selectedServices,
+                                  date:
+                                      context.read<BookingDate>().formatedDate,
+                                  time: selectedTime,
+                                )));
                   },
                   child: Text('Confirm Appointment',
                       style: AppTextStyles.heading6.copyWith(

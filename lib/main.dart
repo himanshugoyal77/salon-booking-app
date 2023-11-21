@@ -10,8 +10,16 @@ import 'package:salon_app/pages/onboarding.page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'controller/location_controller.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      "pk_test_51NHSPaSHrFIYiYVqaAMi5u4WOn3kjnNTOcy0lEUBH6ZQZv1IFcImQOAwCo7zZu1kzUHQ0tT9djRcSXUuPqccu3Lb00hpDGu55r";
+
+  //Load our .env file that contains our Stripe Secret key
+  await dotenv.load(fileName: "assets/.env");
 
   runApp(const MyApp());
 }
