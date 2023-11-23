@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:salon_app/features/auth/controller/siginin.dart';
 import 'package:salon_app/features/home/view/home_page.dart';
 import 'package:salon_app/main.dart';
 import 'package:salon_app/utils/ui/text.dart';
@@ -16,10 +18,12 @@ class SignInoptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (text == 'Guest') {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Wrapper()));
+        } else {
+          await Authentication.signInWithGoogle(context: context);
         }
       },
       child: Container(

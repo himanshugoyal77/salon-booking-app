@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/textfields.dart';
+import 'package:salon_app/features/auth/controller/siginin.dart';
 import 'package:salon_app/features/auth/view/widgets/signin_options.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +138,15 @@ class AuthPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      const VerveField(
+                      VerveField(
                         label: "E-mail address",
                         textFieldType: TextFieldType.email,
+                        controller: email,
                       ),
-                      const VerveField(
+                      VerveField(
                         label: "password",
                         textFieldType: TextFieldType.password,
+                        controller: password,
                       ),
                       Row(
                         children: [
@@ -162,7 +173,10 @@ class AuthPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Authentication.withEmailandPassword(
+                                email.text, password.text);
+                          },
                           child: const Text('Login')),
                       const SizedBox(
                         height: 12,

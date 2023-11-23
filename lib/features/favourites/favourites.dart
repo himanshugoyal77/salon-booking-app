@@ -4,7 +4,6 @@ import 'package:salon_app/components/carousel.dart';
 import 'package:salon_app/features/home/widgets/topartist.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
-import 'package:scratcher/scratcher.dart';
 
 class FavouriteArtists extends StatelessWidget {
   const FavouriteArtists({super.key});

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +9,9 @@ import 'package:salon_app/features/schedule/userschedule.dart';
 import 'package:salon_app/features/search/controller/searchbar_controller.dart';
 import 'package:salon_app/features/auth/view/pages/auth.dart';
 import 'package:salon_app/features/home/view/home_page.dart';
-import 'package:salon_app/pages/onboarding.page.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:salon_app/firebase_options.dart';
 import 'controller/location_controller.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,7 +24,10 @@ Future<void> main() async {
 
   //Load our .env file that contains our Stripe Secret key
   await dotenv.load(fileName: "assets/.env");
-
+  await Firebase.initializeApp(
+    name: 'salon-app',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
