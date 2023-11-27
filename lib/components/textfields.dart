@@ -76,7 +76,7 @@ class _VerveFieldState extends State<VerveField> {
         obscureText:
             widget.textFieldType == TextFieldType.password ? obscured : false,
         style: AppTextStyles.bodyRegular, // Text style for the input
-
+        cursorColor: Styles.primaryColor,
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.all(18),

@@ -1,7 +1,8 @@
 class DataLists {
   static const hairArtists = [
     {
-      "name": "John Smith",
+      "id": 1,
+      "name": "Aisha Smith",
       "image": "assets/artists/a1.jpg",
       "profession": "Barber",
       "location": "123 Main Street, Anytown, USA",
@@ -37,6 +38,7 @@ class DataLists {
       ]
     },
     {
+      "id": 2,
       "name": "Sarah Johnson",
       "image": "assets/artists/a2.jpg",
       "profession": "Hair Stylist",
@@ -72,6 +74,7 @@ class DataLists {
       ]
     },
     {
+      "id": 3,
       "name": "Michael Brown",
       "image": "assets/artists/a3.jpg",
       "profession": "Barber",
@@ -108,6 +111,7 @@ class DataLists {
       ]
     },
     {
+      "id": 4,
       "name": "Emily Davis",
       "image": "assets/artists/a1.jpg",
       "profession": "Hair Stylist",
@@ -143,6 +147,7 @@ class DataLists {
       ]
     },
     {
+      "id": 5,
       "name": "David White",
       "image": "assets/artists/a3.jpg",
       "profession": "Barber",
@@ -152,7 +157,8 @@ class DataLists {
       "specialties": [
         "Men's Haircuts",
         "Straight Razor Shaves",
-        "Beard Grooming"
+        "Beard Grooming",
+        "Spa"
       ],
       "availability": {
         "Monday": "9:00 AM - 6:00 PM",
@@ -163,7 +169,7 @@ class DataLists {
         "Saturday": "10:00 AM - 3:00 PM",
         "Sunday": "Closed"
       },
-      "rating": 4.7,
+      "rating": 3,
       "per_hour_cost": 45,
       "description":
           "David White is a skilled barber with a passion for classic barbering. He excels in delivering precision men's haircuts, straight razor shaves, and expert beard grooming.",
@@ -182,6 +188,7 @@ class DataLists {
       ]
     },
     {
+      "id": 6,
       "name": "Olivia Green",
       "image": "assets/artists/a2.jpg",
       "profession": "Hair Stylist",
@@ -215,5 +222,83 @@ class DataLists {
         }
       ]
     }
+  ];
+
+  static List topArtists = [
+    {
+      "id": 1,
+      "name": "Aisha Smith",
+      "image": "assets/artists/a1.jpg",
+      'image2': 'assets/artists/a1.png',
+      "profession": "hair Stylist",
+      "location": "123 Main Street, Anytown, USA",
+      "phone": "(555) 555-5555",
+      "email": "john@example.com",
+      "specialties": ["Men's Haircuts", "Beard Trimming", "Shaving"],
+      "availability": {
+        "Monday": "9:00 AM - 6:00 PM",
+        "Tuesday": "9:00 AM - 6:00 PM",
+        "Wednesday": "9:00 AM - 6:00 PM",
+        "Thursday": "9:00 AM - 6:00 PM",
+        "Friday": "9:00 AM - 6:00 PM",
+        "Saturday": "10:00 AM - 4:00 PM",
+        "Sunday": "Closed"
+      },
+      "rating": 4.8,
+      "per_hour_cost": 40,
+      "description":
+          "John Smith is an experienced barber known for his attention to detail and classic grooming services. He takes pride in delivering sharp haircuts and well-groomed beards.",
+      "reviews": [
+        {
+          "user": "Alice",
+          "rating": 5,
+          "comment":
+              "John gives the best haircuts in town! I wouldn't trust anyone else with my beard."
+        },
+        {
+          "user": "Bob",
+          "rating": 4,
+          "comment":
+              "John's service is excellent, but I wish he had more flexible hours."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "image": "assets/artists/a2.jpg",
+      'image2': 'assets/artists/a2.png',
+      "profession": "Hair Stylist",
+      "location": "456 Elm Street, Anycity, USA",
+      "phone": "(555) 555-5556",
+      "email": "sarah@example.com",
+      "specialties": ["Women's Haircuts", "Coloring", "Extensions"],
+      "availability": {
+        "Monday": "10:00 AM - 7:00 PM",
+        "Tuesday": "10:00 AM - 7:00 PM",
+        "Wednesday": "10:00 AM - 7:00 PM",
+        "Thursday": "10:00 AM - 7:00 PM",
+        "Friday": "10:00 AM - 7:00 PM",
+        "Saturday": "9:00 AM - 3:00 PM",
+        "Sunday": "Closed"
+      },
+      "rating": 4.9,
+      "per_hour_cost": 60,
+      "description":
+          "Sarah Johnson is a talented hair stylist who specializes in creative and trendy hairstyles. She's known for her artistic coloring and expert hair extension services.",
+      "reviews": [
+        {
+          "user": "Emily",
+          "rating": 5,
+          "comment":
+              "Sarah worked wonders with my hair. I left the salon feeling like a new person."
+        },
+        {
+          "user": "Mark",
+          "rating": 4,
+          "comment": "Great stylist, but a bit on the expensive side."
+        }
+      ]
+    },
   ];
 }

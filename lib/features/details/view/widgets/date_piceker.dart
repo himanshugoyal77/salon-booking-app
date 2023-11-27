@@ -1,7 +1,7 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:salon_app/features/booking/booking_date.dart';
+import 'package:salon_app/features/booking/controllers/booking_date.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
 

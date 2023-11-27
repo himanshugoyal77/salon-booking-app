@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salon_app/features/home/controller/searchcontroller.dart';
 import 'package:salon_app/features/search/controller/searchbar_controller.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 
@@ -14,9 +15,18 @@ class MySearchBar extends StatefulWidget {
 }
 
 class _MySearchBarState extends State<MySearchBar> {
+  final searchQuery = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchQuery.text = context.read<SearchQueryProvider>().query != ""
+        ? context.read<SearchQueryProvider>().query
+        : "";
+  }
+
   @override
   Widget build(BuildContext context) {
-    final searchQuery = TextEditingController();
     return SizedBox(
       height: 40,
       width: double.infinity,
@@ -24,6 +34,7 @@ class _MySearchBarState extends State<MySearchBar> {
         children: [
           Expanded(
             child: TextField(
+              controller: searchQuery,
               decoration: InputDecoration(
                 isDense: true,
                 hintText: 'Find your best artist',
@@ -46,7 +57,14 @@ class _MySearchBarState extends State<MySearchBar> {
                 alignLabelWithHint: true,
               ),
               textInputAction: TextInputAction.search,
-              onSubmitted: (value) {},
+              onSubmitted: (value) {
+                setState(() {
+                  searchQuery.text = value;
+                  context
+                      .read<SearchQueryProvider>()
+                      .setQuery(searchQuery.text);
+                });
+              },
             ),
           ),
           const SizedBox(

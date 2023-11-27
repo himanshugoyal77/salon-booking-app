@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:salon_app/features/auth/controller/siginin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:salon_app/features/home/view/home_page.dart';
 import 'package:salon_app/main.dart';
+import 'package:salon_app/utils/services/notifications.dart';
 import 'package:salon_app/utils/ui/text.dart';
 
 class SignInoptions extends StatelessWidget {
@@ -17,13 +19,54 @@ class SignInoptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void saveToFirebase(User user) {
+      FirebaseFirestore.instance.collection("userInfo").doc(user.uid).set({
+        "phone": user.phoneNumber ?? '',
+        "age": '',
+        "username": user.displayName,
+        //  "imageUrl": ,
+        "email": user.email,
+        "city": 'New York',
+        "uid": user.uid,
+        "profileUrl": user.photoURL ??
+            'https://img.freepik.com/premium-vector/woman-avatar-profile-round-icon_24640-14047.jpg?w=360',
+        'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+        'pastAppointments': [],
+        'upcomingAppointments': [],
+        'reviews': [],
+        'favourites': [],
+        'notifications': [],
+      }).then((value) {
+        ToastManager.showErrorToast(context, 'Account created successfully');
+      }).then((value) => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (ctx) =>  Wrapper())));
+    }
+
     return GestureDetector(
       onTap: () async {
         if (text == 'Guest') {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Wrapper()));
+              MaterialPageRoute(builder: (context) =>  Wrapper()));
         } else {
-          await Authentication.signInWithGoogle(context: context);
+          Authentication.signInWithGoogle(context: context).then(
+            (value) async {
+              print(value);
+              if (value != null) {
+                var collection =
+                    FirebaseFirestore.instance.collection('userInfo');
+                var docSnapshot = await collection.doc(value.uid).get();
+                if (docSnapshot.exists) {
+                  print('User already exists');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (ctx) => Wrapper()),
+                  );
+                } else {
+                  saveToFirebase(value);
+                }
+              }
+            },
+          );
         }
       },
       child: Container(

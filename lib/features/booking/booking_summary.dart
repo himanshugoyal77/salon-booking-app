@@ -4,11 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' hide Card;
+import 'package:provider/provider.dart';
 import 'package:salon_app/features/booking/widgets/divider.dart';
+import 'package:salon_app/main.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 
 import '../../utils/ui/text.dart';
 import 'package:http/http.dart' as http;
+
+import 'controllers/orderdata.dart';
 
 const List<String> paymentMethods = [
   "Cash",
@@ -46,21 +50,12 @@ List<Map<String, dynamic>> unselectedServices = [
 ];
 
 class BookingSummary extends StatefulWidget {
-  const BookingSummary(
-      {super.key,
-      required this.name,
-      required this.id,
-      required this.services,
-      required this.selectedServices,
-      required this.date,
-      required this.time});
+  const BookingSummary({
+    super.key,
+    required this.selectedServices,
+  });
 
-  final String name;
-  final int id;
-  final List services;
-  final List selectedServices;
-  final String date;
-  final String time;
+  final List<int> selectedServices;
 
   @override
   State<BookingSummary> createState() => _BookingSummaryState();
@@ -68,14 +63,6 @@ class BookingSummary extends StatefulWidget {
 
 class _BookingSummaryState extends State<BookingSummary> {
   String dropdownValue = paymentMethods.first;
-
-  double findTotal() {
-    double total = 0;
-    for (var i = 0; i < widget.selectedServices.length; i++) {
-      total += unselectedServices[widget.selectedServices[i]]["price"];
-    }
-    return total;
-  }
 
   displayPaymentSheet() async {
     try {
@@ -96,6 +83,12 @@ class _BookingSummaryState extends State<BookingSummary> {
                     ],
                   ),
                 ));
+        Provider.of<OrderInfo>(context, listen: false).setPaymentStatus(true);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
+          return Wrapper(
+            currIndex: 1,
+          );
+        }));
         var paymentIntent = null;
       }).onError((error, stackTrace) {
         throw Exception(error);
@@ -182,9 +175,10 @@ class _BookingSummaryState extends State<BookingSummary> {
 
   @override
   Widget build(BuildContext context) {
-    print("secret ${dotenv.env['STRIPE_SECRET']}");
+    final OrderInfo orderInfoProvider = Provider.of<OrderInfo>(context);
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -221,12 +215,12 @@ class _BookingSummaryState extends State<BookingSummary> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.name,
+                      orderInfoProvider.artistName,
                       style: AppTextStyles.bodyRegularBold
                           .copyWith(fontSize: 16, color: Styles.primaryColor),
                     ),
                     Text(
-                      widget.services.join(", "),
+                      orderInfoProvider.artistServices.join(", "),
                       style: AppTextStyles.bodyExtraSmall
                           .copyWith(fontSize: 12, color: Styles.textGray),
                     ),
@@ -267,11 +261,13 @@ class _BookingSummaryState extends State<BookingSummary> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.date,
+                            orderInfoProvider
+                                .date, //widget.date.toString().split(" ")[0],
                             style: AppTextStyles.bodyExtraSmall,
                           ),
                           Text(
-                            widget.time,
+                            orderInfoProvider
+                                .time, //widget.date.toString().split(" ")[1]
                             style: AppTextStyles.bodySmallBold,
                           ),
                         ],
@@ -418,7 +414,7 @@ class _BookingSummaryState extends State<BookingSummary> {
                   ),
                   const Spacer(),
                   Text(
-                    "\$ ${findTotal().toStringAsFixed(2)}",
+                    "\$ ${orderInfoProvider.totalPrice}",
                     style:
                         AppTextStyles.bodySmallBold.copyWith(color: Colors.red),
                   ),
@@ -427,7 +423,7 @@ class _BookingSummaryState extends State<BookingSummary> {
             ),
             const SizedBox(height: 20),
             const CustomDivider(),
-            dropdownValue == 'Cash'
+            dropdownValue != 'Cash'
                 ? Center(
                     child: ElevatedButton(
                       onPressed: () async {

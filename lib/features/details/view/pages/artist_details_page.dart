@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:salon_app/features/booking/book.dart';
+import 'package:salon_app/features/booking/controllers/orderdata.dart';
 import 'package:salon_app/features/details/view/widgets/cusotm_map.dart';
 import 'package:salon_app/features/details/view/widgets/available_dates.dart';
 import 'package:salon_app/utils/data/pastwork.dart';
@@ -16,9 +18,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArtistDetailsPage extends StatefulWidget {
-  ArtistDetailsPage({super.key, required this.animation});
+  ArtistDetailsPage({super.key, required this.animation, required this.data});
 
   Animation<double> animation;
+  dynamic data;
 
   @override
   State<ArtistDetailsPage> createState() => _ArtistDetailsPageState();
@@ -40,23 +43,23 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
       'func': const AvailableModal()
     }
   ];
+  Future saveAndShare(Uint8List? bytes) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final image = File('${directory.path}/flutter.png');
+    image.writeAsBytesSync(bytes!);
 
+    await Share.shareFiles(
+      [image.path],
+      text: 'Aisha',
+      subject: 'Face Art',
+    );
+  }
+
+  final ScreenshotController screenshotController = ScreenshotController();
   @override
   Widget build(BuildContext context) {
-    Future saveAndShare(Uint8List? bytes) async {
-      final directory = await getApplicationDocumentsDirectory();
-      final image = File('${directory.path}/flutter.png');
-      image.writeAsBytesSync(bytes!);
-
-      await Share.shareFiles(
-        [image.path],
-        text: 'Aisha',
-        subject: 'Face Art',
-      );
-    }
-
     final Size size = MediaQuery.of(context).size;
-    final ScreenshotController screenshotController = ScreenshotController();
+    final OrderInfo orderInfoProvider = Provider.of<OrderInfo>(context);
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -114,8 +117,8 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                                         const SizedBox(
                                           width: 2,
                                         ),
-                                        HeroTextChild(
-                                          text: '4.5',
+                                        Text(
+                                          widget.data['rating'].toString(),
                                           style: Styles.body.copyWith(
                                               color: Colors.grey,
                                               fontSize: 15,
@@ -129,14 +132,14 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                                     Material(
                                       color: Colors.transparent,
                                       child: Text(
-                                        'Facial Artist',
+                                        widget.data['profession'],
                                         style: Styles.heading,
                                       ),
                                     ),
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text('By Aisha',
+                                    Text('By ${widget.data['name']}',
                                         style:
                                             Styles.body.copyWith(fontSize: 13)),
                                     const SizedBox(
@@ -149,7 +152,8 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                                           style: Styles.heading
                                               .copyWith(fontSize: 18)),
                                       TextSpan(
-                                          text: '${67.00}',
+                                          text: widget.data['per_hour_cost']
+                                              .toString(),
                                           style: Styles.heading),
                                       TextSpan(
                                           text: '/Hour',
@@ -167,9 +171,10 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                         bottom: 0,
                         right: -30,
                         child: Hero(
-                            tag: 'assets/artists/a1.png',
+                            tag: widget.data['image'] +
+                                widget.data['id'].toString(),
                             child: Image.asset(
-                              'assets/artists/a1.png',
+                              widget.data['image2'] ?? widget.data['image'],
                               height: 250,
                               width: 250,
                             )),
@@ -193,7 +198,6 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                                 .map((e) => GestureDetector(
                                       onTap: () async {
                                         if (e['text'] == 'Share') {
-                                          print('share');
                                           final image =
                                               await screenshotController
                                                   .capture();
@@ -257,8 +261,9 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                               borderRadius: BorderRadius.circular(9),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromARGB(255, 168, 160, 160)
-                                      .withOpacity(0.6),
+                                  color:
+                                      const Color.fromARGB(255, 168, 160, 160)
+                                          .withOpacity(0.6),
                                   offset: const Offset(1, 1),
                                   blurRadius: 9,
                                   spreadRadius: -2,
@@ -313,7 +318,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                       Expanded(
                         child: TabBarView(children: [
                           ReadMoreText(
-                            'The Flutter framework builds its layout via the composition of widgets, everything that you construct programmatically is a widget and these are compiled together to create the user interface. ',
+                            widget.data['description'],
                             trimLines: 3,
                             style: Styles.body.copyWith(
                                 fontSize: 13,
@@ -377,14 +382,15 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage>
                             ),
                           ),
                           onPressed: () {
+                            orderInfoProvider.setArtistInfo(
+                                widget.data['id'].toString(),
+                                widget.data['name'],
+                                widget.data['image'],
+                                widget.data['specialties']);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Book(
-                                  name: 'Aisha',
-                                  id: 1,
-                                  services: ['Facial Artist', 'Hair Stylist'],
-                                ),
+                                builder: (context) => const Book(),
                               ),
                             );
                           },
@@ -419,8 +425,8 @@ class DetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: 60,
+      height: 65,
+      width: 65,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
           boxShadow: [],

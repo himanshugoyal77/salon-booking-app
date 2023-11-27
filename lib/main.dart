@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:salon_app/features/booking/booking_date.dart';
+import 'package:salon_app/features/auth/controller/login_provider.dart';
+import 'package:salon_app/features/booking/controllers/booking_date.dart';
+import 'package:salon_app/features/booking/controllers/orderdata.dart';
 import 'package:salon_app/features/favourites/favourites.dart';
 import 'package:salon_app/features/profile/profilescreen.dart';
 import 'package:salon_app/features/schedule/userschedule.dart';
@@ -16,6 +18,8 @@ import 'controller/location_controller.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+
+import 'features/home/controller/searchcontroller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,32 +47,43 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: ((context) => BookingDate())),
           ChangeNotifierProvider<SearchbarController>(
               create: ((context) => SearchbarController())),
+          ChangeNotifierProvider<AuthMethod>(
+              create: ((context) => AuthMethod())),
+          ChangeNotifierProvider<OrderInfo>(create: ((context) => OrderInfo())),
+          ChangeNotifierProvider<SearchQueryProvider>(
+              create: ((context) => SearchQueryProvider())),
         ],
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Salon app',
-            theme: ThemeData(
-              fontFamily: "Inter",
-            ),
-            home: AuthPage()
-            //const AuthPage()
-            // const Wrapper(),
-            //TestWidget()
-            ),
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Salon app',
+              theme: ThemeData(
+                fontFamily: "Inter",
+              ),
+              home: const AuthPage()),
+        ),
       ),
     );
   }
 }
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({super.key});
+  Wrapper({super.key, this.currIndex = 0});
+
+  int currIndex;
 
   @override
   State<Wrapper> createState() => _WrapperState();
 }
 
 class _WrapperState extends State<Wrapper> {
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
   final List<Widget> _children = [
     const HomePage(),
     const UserSchedule(),
@@ -81,7 +96,7 @@ class _WrapperState extends State<Wrapper> {
       body: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
-          child: Material(child: _children[_currentIndex])),
+          child: Material(child: _children[widget.currIndex])),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 5,
@@ -93,11 +108,11 @@ class _WrapperState extends State<Wrapper> {
         unselectedItemColor: Colors.grey,
         selectedIconTheme: const IconThemeData(size: 20),
         unselectedIconTheme: const IconThemeData(size: 18),
-        currentIndex: _currentIndex,
+        currentIndex: widget.currIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
-            _currentIndex = value;
+            widget.currIndex = value;
           });
         },
         items: const [

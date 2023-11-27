@@ -321,8 +321,9 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     // make it scrollable
-                    TopArtistCard(size: size),
-                    TopArtistCard(size: size),
+                    ...DataLists.topArtists
+                        .map((e) => TopArtistCard(data: e))
+                        .toList()
                     // TopArtistCard(size: size),
                   ],
                 ),
@@ -334,5 +335,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

@@ -2,11 +2,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:salon_app/features/booking/booking_date.dart';
+import 'package:salon_app/features/booking/controllers/booking_date.dart';
 import 'package:salon_app/features/booking/booking_summary.dart';
 import 'package:salon_app/features/details/view/widgets/date_piceker.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
+
+import 'controllers/orderdata.dart';
 
 List<Map<String, dynamic>> time = [
   {"time": "09:00 AM", "isAvailable": true, "isSelected": false},
@@ -31,15 +33,9 @@ List<Map<String, dynamic>> time = [
 ];
 
 class Book extends StatefulWidget {
-  const Book(
-      {super.key,
-      required this.name,
-      required this.services,
-      required this.id});
-
-  final String name;
-  final int id;
-  final List services;
+  const Book({
+    super.key,
+  });
 
   @override
   State<Book> createState() => _BookState();
@@ -52,40 +48,55 @@ class _BookState extends State<Book> {
       "id": 0,
       "price": 49.99,
       "service": "Haircut",
+      "duration": 60,
     },
     {
       "id": 1,
       "price": 69.99,
       "service": "Hair Color",
+      "duration": 90,
     },
     {
       "id": 2,
       "price": 29.99,
       "service": "Manicure",
+      "duration": 30,
     },
     {
       "id": 3,
       "price": 49.99,
       "service": "Pedicure",
+      "duration": 40,
     },
     {
       "id": 4,
       "price": 9.99,
       "service": "Nail Art",
+      "duration": 20,
     },
   ];
 
   String selectedTime = "09:00 AM";
 
+  double findTotal() {
+    double total = 0;
+    for (var i = 0; i < selectedServices.length; i++) {
+      total += unselectedServices[selectedServices[i]]["price"];
+    }
+    return total;
+  }
+
+  num findDuration() {
+    num total = 0;
+    for (var i = 0; i < selectedServices.length; i++) {
+      total += unselectedServices[selectedServices[i]]["duration"];
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double findTotal() {
-      double total = 0;
-      for (var i = 0; i < selectedServices.length; i++) {
-        total += unselectedServices[selectedServices[i]]["price"];
-      }
-      return total;
-    }
+    final OrderInfo orderInfoProvider = Provider.of<OrderInfo>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -270,17 +281,20 @@ class _BookState extends State<Book> {
                     ),
                   ),
                   onPressed: () {
+                    orderInfoProvider.setOrderInfo(
+                      context.read<BookingDate>().formatedDate,
+                      selectedTime,
+                      findDuration(),
+                      findTotal().toStringAsFixed(2),
+                      selectedServices
+                          .map((e) => unselectedServices[e]["service"])
+                          .toList(),
+                    );
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => BookingSummary(
-                                  name: widget.name,
-                                  id: widget.id,
-                                  services: widget.services,
                                   selectedServices: selectedServices,
-                                  date:
-                                      context.read<BookingDate>().formatedDate,
-                                  time: selectedTime,
                                 )));
                   },
                   child: Text('Confirm Appointment',

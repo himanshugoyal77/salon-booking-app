@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:salon_app/features/search/view/pages/search_page.dart';
 import 'package:salon_app/utils/ui/styles.dart';
+
+import '../controller/searchcontroller.dart';
 
 class SearchFilter extends StatefulWidget {
   SearchFilter({
@@ -56,24 +59,19 @@ class _SearchFilterState extends State<SearchFilter> {
               ),
               textInputAction: TextInputAction.search,
               onSubmitted: (value) {
-                if (widget.path != 'search') {
-                  Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 800),
-                          reverseTransitionDuration:
-                              const Duration(milliseconds: 800),
-                          pageBuilder: (context, animation, animation2) {
-                            final CurvedAnimation curve = CurvedAnimation(
-                                parent: animation,
-                                curve: const Interval(0, 0.5));
-                            return FadeTransition(
-                                opacity: curve,
-                                child: SearchPage(
-                                  query: value,
-                                ));
-                          }));
-                }
+                context.read<SearchQueryProvider>().setQuery(value);
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 800),
+                        reverseTransitionDuration:
+                            const Duration(milliseconds: 800),
+                        pageBuilder: (context, animation, animation2) {
+                          final CurvedAnimation curve = CurvedAnimation(
+                              parent: animation, curve: const Interval(0, 0.5));
+                          return FadeTransition(
+                              opacity: curve, child: const SearchPage());
+                        }));
               },
             ),
           ),
@@ -98,10 +96,7 @@ class _SearchFilterState extends State<SearchFilter> {
                           final CurvedAnimation curve = CurvedAnimation(
                               parent: animation, curve: const Interval(0, 0.5));
                           return FadeTransition(
-                              opacity: curve,
-                              child: SearchPage(
-                                query: widget.query,
-                              ));
+                              opacity: curve, child: const SearchPage());
                         }));
               }
             },

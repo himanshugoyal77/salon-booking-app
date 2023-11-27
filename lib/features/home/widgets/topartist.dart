@@ -5,13 +5,14 @@ import 'package:salon_app/utils/ui/styles.dart';
 class TopArtistCard extends StatelessWidget {
   const TopArtistCard({
     super.key,
-    required this.size,
+    required this.data,
   });
 
-  final Size size;
+  final dynamic data;
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: (() => Navigator.push(
           context,
@@ -25,6 +26,7 @@ class TopArtistCard extends StatelessWidget {
                   opacity: curve,
                   child: ArtistDetailsPage(
                     animation: curve,
+                    data: data,
                   ),
                 );
               }))),
@@ -48,14 +50,14 @@ class TopArtistCard extends StatelessWidget {
           child: Row(
             children: [
               Hero(
-                tag: 'assets/artists/a1.png',
+                tag: data['image'] + data['id'].toString(),
                 child: Container(
                   height: 80,
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/artists/a1.png'),
+                    image: DecorationImage(
+                      image: AssetImage(data['image2'] ?? data['image']),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -81,7 +83,7 @@ class TopArtistCard extends StatelessWidget {
                           width: 2,
                         ),
                         Text(
-                          '4.5',
+                          data['rating'].toString(),
                           style: Styles.body.copyWith(
                               fontSize: 15, fontWeight: FontWeight.w600),
                         ),
@@ -106,13 +108,10 @@ class TopArtistCard extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    Hero(
-                      tag: 'assets/artists/a1.png' + 'profession',
-                      child: Text(
-                        'Haircut Artist',
-                        style: Styles.heading.copyWith(
-                            fontSize: 17, fontWeight: FontWeight.w600),
-                      ),
+                    Text(
+                      data['name'],
+                      style: Styles.heading
+                          .copyWith(fontSize: 17, fontWeight: FontWeight.w600),
                     )
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/carousel.dart';
 import 'package:salon_app/features/home/widgets/topartist.dart';
+import 'package:salon_app/utils/data/data.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
 
@@ -23,9 +24,11 @@ class FavouriteArtists extends StatelessWidget {
                   style: AppTextStyles.heading6Bold
                       .copyWith(color: Styles.primaryColor)),
               const SizedBox(height: 12),
-              TopArtistCard(size: size),
-              TopArtistCard(size: size),
-              TopArtistCard(size: size),
+              ...DataLists.hairArtists
+                  .map((e) => TopArtistCard(
+                        data: e,
+                      ))
+                  .toList(),
             ],
           ),
         ),
