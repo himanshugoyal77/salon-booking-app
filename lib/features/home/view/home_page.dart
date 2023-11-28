@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_app/db/userinfo.dart';
 import 'package:salon_app/features/details/view/pages/artist_details_page.dart';
 import 'package:salon_app/features/home/widgets/searchfilter.dart';
 import 'package:salon_app/features/home/widgets/services.dart';
 import 'package:salon_app/features/home/widgets/topartist.dart';
 import 'package:salon_app/features/search/view/pages/search_page.dart';
 import 'package:salon_app/utils/data/data.dart';
+import 'package:salon_app/utils/services/notifications.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
 
@@ -55,6 +58,18 @@ class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   int selectedIndex = 0;
   double opacityVal = 0;
+  String? uid;
+
+  @override
+  void initState() {
+    super.initState();
+    UserDb.getUserInfo().then((value) {
+      setState(() {
+        uid = value!.uid;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -213,10 +228,39 @@ class _HomePageState extends State<HomePage> {
                                                     backgroundColor:
                                                         Styles.secondaryColor,
                                                     maxRadius: 12,
-                                                    child: const Icon(
-                                                        Icons.bookmark_outline,
-                                                        size: 12,
-                                                        color: Colors.black),
+                                                    child: IconButton(
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        onPressed: () {
+                                                          if (uid != null) {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'userInfo')
+                                                                .doc(uid)
+                                                                .update({
+                                                              "favourites":
+                                                                  FieldValue
+                                                                      .arrayUnion([
+                                                                e["id"]
+                                                              ])
+                                                            }).then((value) => ToastManager
+                                                                    .showSuccessToast(
+                                                                        context,
+                                                                        "${e["name"]} Added to favourites"));
+                                                          } else {
+                                                            ToastManager
+                                                                .showErrorToast(
+                                                                    context,
+                                                                    "Please login to add to favourites");
+                                                          }
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons
+                                                                .bookmark_outline,
+                                                            size: 12,
+                                                            color:
+                                                                Colors.black)),
                                                   ),
                                                 ),
                                               ],

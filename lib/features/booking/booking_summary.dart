@@ -1,12 +1,17 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' hide Card;
 import 'package:provider/provider.dart';
+import 'package:salon_app/db/userinfo.dart';
+import 'package:salon_app/db/usermodel.dart';
 import 'package:salon_app/features/booking/widgets/divider.dart';
 import 'package:salon_app/main.dart';
+import 'package:salon_app/utils/services/notifications.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 
 import '../../utils/ui/text.dart';
@@ -63,6 +68,19 @@ class BookingSummary extends StatefulWidget {
 
 class _BookingSummaryState extends State<BookingSummary> {
   String dropdownValue = paymentMethods.first;
+  UserModel? user;
+  String uid = '';
+
+  @override
+  void initState() {
+    super.initState();
+    UserDb.getUserInfo().then((value) {
+      setState(() {
+        user = value;
+        uid = user!.uid;
+      });
+    });
+  }
 
   displayPaymentSheet() async {
     try {
@@ -84,6 +102,33 @@ class _BookingSummaryState extends State<BookingSummary> {
                   ),
                 ));
         Provider.of<OrderInfo>(context, listen: false).setPaymentStatus(true);
+        FirebaseFirestore.instance
+            .collection('oreders')
+            .doc(context.read<OrderInfo>().artistId)
+            .set({
+          'paymentStatus': context.read<OrderInfo>().paymentStatus,
+          'userId': uid,
+          'artistName': context.read<OrderInfo>().artistName,
+          'artistId': context.read<OrderInfo>().artistId,
+          'duration': context.read<OrderInfo>().duration,
+          'date': context.read<OrderInfo>().date,
+          'time': context.read<OrderInfo>().time,
+          'totalPrice': context.read<OrderInfo>().totalPrice,
+          'services': context.read<OrderInfo>().services,
+        });
+        FirebaseFirestore.instance.collection('userInfo').doc(uid).update({
+          "upcomingAppointments": {
+            'paymentStatus': context.read<OrderInfo>().paymentStatus,
+            'artistName': context.read<OrderInfo>().artistName,
+            'artistId': context.read<OrderInfo>().artistId,
+            'duration': context.read<OrderInfo>().duration,
+            'date': context.read<OrderInfo>().date,
+            'time': context.read<OrderInfo>().time,
+            'totalPrice': context.read<OrderInfo>().totalPrice,
+            'services': context.read<OrderInfo>().services,
+          }
+        });
+        ToastManager.showSuccessToast(context, "Payment Successful!");
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
           return Wrapper(
             currIndex: 1,
@@ -427,6 +472,11 @@ class _BookingSummaryState extends State<BookingSummary> {
                 ? Center(
                     child: ElevatedButton(
                       onPressed: () async {
+                        if (user == null) {
+                          ToastManager.showErrorToast(
+                              context, "Please Login to continue");
+                          return;
+                        }
                         await makePayment();
                       },
                       style: ElevatedButton.styleFrom(

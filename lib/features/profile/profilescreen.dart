@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_app/features/auth/view/pages/auth.dart';
 import 'package:salon_app/features/profile/widgets/profilemenu.dart';
 import 'package:salon_app/features/profile/widgets/updateprofile.dart';
 import 'package:salon_app/utils/ui/styles.dart';
 import 'package:salon_app/utils/ui/text.dart';
+
+import '../../db/userinfo.dart';
+import '../auth/controller/siginin.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -123,7 +127,14 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.logout,
                       textColor: Colors.red,
                       endIcon: false,
-                      onPress: () {}),
+                      onPress: () {
+                        UserDb.removeUserInfo();
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const AuthPage();
+                        }));
+                        Authentication.signOut(context: context);
+                      }),
                 ],
               ),
             )

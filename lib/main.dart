@@ -19,6 +19,7 @@ import 'controller/location_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
+import 'db/userinfo.dart';
 import 'features/home/controller/searchcontroller.dart';
 
 Future<void> main() async {
@@ -35,8 +36,28 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoggedIn = false;
+  @override
+  void initState() {
+    super.initState();
+    UserDb.getUserInfo().then((value) {
+      print('User Info 00: ${value!.username}');
+      if (value != null) {
+        setState(() {
+          isLoggedIn = true;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -66,7 +87,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 fontFamily: "Inter",
               ),
-              home: const AuthPage()),
+              home: isLoggedIn ? Wrapper() : const AuthPage()),
         ),
       ),
     );

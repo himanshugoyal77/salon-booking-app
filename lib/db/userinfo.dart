@@ -14,12 +14,18 @@ class UserDb {
     print('User Info Saved');
   }
 
-  static Future<UserModel> getUserInfo() async {
+  static Future<UserModel?> getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserModel? user;
     if (prefs.containsKey('userKey')) {
       user = UserModel.fromJson(jsonDecode(prefs.getString('userKey')!));
     }
     return user!;
+  }
+
+  static Future<void> removeUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userKey');
+    print('User Info Removed');
   }
 }
