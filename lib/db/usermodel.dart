@@ -8,9 +8,9 @@ class UserModel {
   final String? profileUrl;
   final String? createdAt;
   final List<String>? pastAppointments;
-  final List<String>? upcomingAppointments;
+  final List<dynamic>? upcomingAppointments;
   final List<String>? reviews;
-  final List<String>? favourites;
+  final List<int>? favourites;
   final List<String>? notifications;
 
   UserModel({
@@ -43,13 +43,13 @@ class UserModel {
             : List<String>.from(json["pastAppointments"]!.map((x) => x)),
         upcomingAppointments: json["upcomingAppointments"] == null
             ? []
-            : List<String>.from(json["upcomingAppointments"]!.map((x) => x)),
+            : List<dynamic>.from(json["upcomingAppointments"]!.map((x) => x)),
         reviews: json["reviews"] == null
             ? []
             : List<String>.from(json["reviews"]!.map((x) => x)),
         favourites: json["favourites"] == null
             ? []
-            : List<String>.from(json["favourites"]!.map((x) => x)),
+            : List<int>.from(json["favourites"]!.map((x) => x)),
         notifications: json["notifications"] == null
             ? []
             : List<String>.from(json["notifications"]!.map((x) => x)),

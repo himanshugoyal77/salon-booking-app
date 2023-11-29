@@ -44,7 +44,6 @@ class _FavouriteArtistsState extends State<FavouriteArtists> {
                 .doc(uuid)
                 .snapshots(),
             builder: ((context, AsyncSnapshot snapshot) {
-              print("snapshot ${snapshot.data["favourites"]}");
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -52,18 +51,21 @@ class _FavouriteArtistsState extends State<FavouriteArtists> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return Column(
-                children: [
-                  ...DataLists.hairArtists.map((e) {
-                    if (snapshot.data["favourites"].contains(e["id"])) {
-                      return TopArtistCard(
-                        data: e,
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }).toList()
-                ],
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    ...DataLists.hairArtists.map((e) {
+                      if (snapshot.data["favourites"].contains(e["id"])) {
+                        return TopArtistCard(
+                          data: e,
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    }).toList()
+                  ],
+                ),
               );
             })));
   }

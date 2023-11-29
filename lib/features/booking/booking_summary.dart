@@ -70,6 +70,31 @@ class _BookingSummaryState extends State<BookingSummary> {
   String dropdownValue = paymentMethods.first;
   UserModel? user;
   String uid = '';
+  List userfav = [];
+  List artistOrder = [];
+
+  void getData() async {
+    var collection = FirebaseFirestore.instance.collection('orders');
+    var docSnapshot =
+        await collection.doc(context.read<OrderInfo>().artistId).get();
+    if (docSnapshot.data() != null) {
+      setState(() {
+        artistOrder = docSnapshot.data()!["orders"];
+      });
+    }
+  }
+
+  void getUserFav() async {
+    var collection = FirebaseFirestore.instance.collection('userInfo');
+    var docSnapshot = await collection.doc(uid).get();
+    print("doc snapshot");
+    print(docSnapshot.data());
+    if (docSnapshot.data() != null) {
+      setState(() {
+        userfav = docSnapshot.data()!["upcomingAppointments"];
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -79,6 +104,8 @@ class _BookingSummaryState extends State<BookingSummary> {
         user = value;
         uid = user!.uid;
       });
+      getData();
+      getUserFav();
     });
   }
 
@@ -103,30 +130,38 @@ class _BookingSummaryState extends State<BookingSummary> {
                 ));
         Provider.of<OrderInfo>(context, listen: false).setPaymentStatus(true);
         FirebaseFirestore.instance
-            .collection('oreders')
+            .collection('orders')
             .doc(context.read<OrderInfo>().artistId)
             .set({
-          'paymentStatus': context.read<OrderInfo>().paymentStatus,
-          'userId': uid,
-          'artistName': context.read<OrderInfo>().artistName,
-          'artistId': context.read<OrderInfo>().artistId,
-          'duration': context.read<OrderInfo>().duration,
-          'date': context.read<OrderInfo>().date,
-          'time': context.read<OrderInfo>().time,
-          'totalPrice': context.read<OrderInfo>().totalPrice,
-          'services': context.read<OrderInfo>().services,
+          "oreders": [
+            ...artistOrder,
+            {
+              'paymentStatus': context.read<OrderInfo>().paymentStatus,
+              'artistName': context.read<OrderInfo>().artistName,
+              'artistId': context.read<OrderInfo>().artistId,
+              'duration': context.read<OrderInfo>().duration,
+              'date': context.read<OrderInfo>().date,
+              'time': context.read<OrderInfo>().time,
+              'totalPrice': context.read<OrderInfo>().totalPrice,
+              'services': context.read<OrderInfo>().services,
+            }
+          ]
         });
+
         FirebaseFirestore.instance.collection('userInfo').doc(uid).update({
-          "upcomingAppointments": {
-            'paymentStatus': context.read<OrderInfo>().paymentStatus,
-            'artistName': context.read<OrderInfo>().artistName,
-            'artistId': context.read<OrderInfo>().artistId,
-            'duration': context.read<OrderInfo>().duration,
-            'date': context.read<OrderInfo>().date,
-            'time': context.read<OrderInfo>().time,
-            'totalPrice': context.read<OrderInfo>().totalPrice,
-            'services': context.read<OrderInfo>().services,
-          }
+          "upcomingAppointments": [
+            ...userfav,
+            {
+              'paymentStatus': context.read<OrderInfo>().paymentStatus,
+              'artistName': context.read<OrderInfo>().artistName,
+              'artistId': context.read<OrderInfo>().artistId,
+              'duration': context.read<OrderInfo>().duration,
+              'date': context.read<OrderInfo>().date,
+              'time': context.read<OrderInfo>().time,
+              'totalPrice': context.read<OrderInfo>().totalPrice,
+              'services': context.read<OrderInfo>().services,
+            }
+          ]
         });
         ToastManager.showSuccessToast(context, "Payment Successful!");
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
