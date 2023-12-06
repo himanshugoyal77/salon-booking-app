@@ -25,7 +25,7 @@ import 'features/home/controller/searchcontroller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey =
-      "pk_test_51NHSPaSHrFIYiYVqaAMi5u4WOn3kjnNTOcy0lEUBH6ZQZv1IFcImQOAwCo7zZu1kzUHQ0tT9djRcSXUuPqccu3Lb00hpDGu55r";
+      "pk_test...";
 
   //Load our .env file that contains our Stripe Secret key
   await dotenv.load(fileName: "assets/.env");
