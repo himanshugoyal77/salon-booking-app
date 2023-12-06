@@ -3,7 +3,7 @@
 
 
 
-[https://github.com/himanshugoyal77/salon_booking_app/assets/92782099/e3d2dadc-9938-47cf-b9c6-f81f427a71c7](https://www.linkedin.com/feed/update/urn:li:activity:7135677470812291074?utm_source=share&utm_medium=member_desktop)
+https://github.com/himanshugoyal77/salon_booking_app/assets/92782099/e3d2dadc-9938-47cf-b9c6-f81f427a71c7](https://www.linkedin.com/feed/update/urn:li:activity:7135677470812291074?utm_source=share&utm_medium=member_desktop
 
 
 
